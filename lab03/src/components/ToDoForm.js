@@ -7,16 +7,18 @@ import validator from 'validator'
 const TodoForm = (props) => {
     const [item, setItem]= useState("");
     const [data, setData]= useState("");
-    const [error, setError] = useState("")
+    const [error, setValidationError] = useState("")
     //const [isclicked, toggleClick] = useState(false)
 
     const handleSubmit = (event) =>{
         event.preventDefault()
-        alert('An element was added to list ' + (item + ", " + data));
-        props.handleSetTodos(todos => [...todos, (<div key={item}>{item}, {data}</div>)]);
+        if(error == ""){
+            alert('An element was added to list ' + (item + ", " + data));
+            props.handleSetTodos(todos => [...todos, (<div key={item}>{item}, {data}</div>)]);
+        }
         //testing /clear, why doesn't work?
-        setItem("")
-        setData("")
+        //setItem("")
+        //setData("")
         //testingerrors
         //toggleClick(false)
     }
@@ -32,7 +34,7 @@ const TodoForm = (props) => {
     return(
         <label>
             <FormToDoItem handleValueItemChange = {setItem} value={item} ></FormToDoItem>
-            <FormToDoData handleValueDataChange = {setData} value={data} handleErrors = {setError}></FormToDoData>
+            <FormToDoData handleValueDataChange = {setData} value={data} handleValErrors = {setValidationError}></FormToDoData>
             <button type="submit" onClick={handleSubmit} >Add to list</button>
             <div>
                 <FormToDoMessage value={error}></FormToDoMessage>
