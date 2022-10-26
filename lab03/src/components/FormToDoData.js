@@ -1,11 +1,18 @@
+import validator from 'validator'
+import moment from 'moment/moment'
+
 const FormToDoData = (props) =>{
     const handleValueChange = (event) =>{
-        if (!validator.isDate(data)) {
-            props.handleValErrors("Validation error")
-        }else{
+        //props.handleValueDataChange(event.target.value)
+        //console.log(event.target.value)
+        //console.log(props.value)
+        if (validator.isDate(event.target.value)) {
+        //if (moment(props.value, "YYYY-MM-DD", true).isValid()) {
+            props.handleValueDataChange(event.target.value)
             props.handleValErrors("")
+        }else{
+            props.handleValErrors("Validation error")
         }
-        props.handleValueDataChange(event.target.value)
     }
     /*const checkError = (event) =>{
         event.preventDefault()
@@ -17,7 +24,7 @@ const FormToDoData = (props) =>{
     }*/
     return(
         <div>
-            <div>Data: <input type="text" onChange={handleValueChange} value={data}></input></div>
+            <div>Data: <input type="text" onChange={handleValueChange}></input></div>
         </div>
     )
 }

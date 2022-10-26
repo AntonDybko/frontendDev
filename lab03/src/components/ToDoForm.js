@@ -2,7 +2,7 @@ import { useState } from 'react';
 import FormToDoData from './FormToDoData';
 import FormToDoMessage from './FormToDoMessage';
 import FormToDoItem from './FormToDoItem';
-import validator from 'validator'
+
 
 const TodoForm = (props) => {
     const [item, setItem]= useState("");
@@ -12,7 +12,7 @@ const TodoForm = (props) => {
 
     const handleSubmit = (event) =>{
         event.preventDefault()
-        if(error == ""){
+        if(error === ""){
             alert('An element was added to list ' + (item + ", " + data));
             props.handleSetTodos(todos => [...todos, (<div key={item}>{item}, {data}</div>)]);
         }
@@ -34,10 +34,10 @@ const TodoForm = (props) => {
     return(
         <label>
             <FormToDoItem handleValueItemChange = {setItem} value={item} ></FormToDoItem>
-            <FormToDoData handleValueDataChange = {setData} value={data} handleValErrors = {setValidationError}></FormToDoData>
+            <FormToDoData handleValueDataChange = {setData} handleValErrors = {setValidationError} value={data}></FormToDoData>
             <button type="submit" onClick={handleSubmit} >Add to list</button>
             <div>
-                <FormToDoMessage value={error}></FormToDoMessage>
+                <FormToDoMessage value={error}>{error}</FormToDoMessage>
             </div>
         </label>
     )
