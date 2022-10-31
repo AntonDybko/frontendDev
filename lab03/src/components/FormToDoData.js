@@ -1,30 +1,36 @@
 import validator from 'validator'
-import moment from 'moment/moment'
+//import moment from 'moment/moment'
 
 const FormToDoData = (props) =>{
     const handleValueChange = (event) =>{
-        //props.handleValueDataChange(event.target.value)
-        //console.log(event.target.value)
-        //console.log(props.value)
+        console.log(event.target.value)
+        props.handleValueDataChange(event.target.value)
+        props.handleClearErrors("")
+        /*if(event.target.value ===""){
+            props.handleValErrors("Empty data")
+        }else{*/
         if (validator.isDate(event.target.value)) {
-        //if (moment(props.value, "YYYY-MM-DD", true).isValid()) {
-            props.handleValueDataChange(event.target.value)
-            props.handleValErrors("")
+            if(event.target.value > getCurrentDate()){
+                //props.handleValueDataChange(event.target.value)
+                props.handleValErrors("")
+            }else{
+                props.handleValErrors("Plan you future!")
+            }
         }else{
             props.handleValErrors("Validation error")
         }
+        //}
     }
-    /*const checkError = (event) =>{
-        event.preventDefault()
-        if (validator.isDate(data) && item != "") {
-            handleSubmit(event)
-        } else {
-
-        }
-    }*/
+    const getCurrentDate = (separator='/') =>{
+        let newDate = new Date()
+        let date = newDate.getDate();
+        let month = newDate.getMonth() + 1;
+        let year = newDate.getFullYear();
+        return `${year}${separator}${month<10?`0${month}`:`${month}`}${separator}${date<10?`0${date}`:`${date}`}`
+    }
     return(
         <div>
-            <div>Data: <input type="text" onChange={handleValueChange}></input></div>
+            <div>Data: <input type="text" onChange={handleValueChange} value = {props.value}></input></div>
         </div>
     )
 }

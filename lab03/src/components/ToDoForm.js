@@ -7,14 +7,35 @@ import FormToDoItem from './FormToDoItem';
 const TodoForm = (props) => {
     const [item, setItem]= useState("");
     const [data, setData]= useState("");
-    const [error, setValidationError] = useState("")
+    const [dataerror, setDataValidationError] = useState("")
+    const [message, setMessage] = useState("")
     //const [isclicked, toggleClick] = useState(false)
 
     const handleSubmit = (event) =>{
         event.preventDefault()
-        if(error === ""){
-            alert('An element was added to list ' + (item + ", " + data));
-            props.handleSetTodos(todos => [...todos, (<div key={item}>{item}, {data}</div>)]);
+        if(data ==="" && item ===""){
+            setMessage("Empty data and item")
+        }else{
+            //console.log("data: " + data +", item:"+ item +", message: " + message + ", dataerror: " + dataerror)
+            if(dataerror !== "" && data !== "" && item !==""){
+                setMessage(dataerror)
+            }
+            if(dataerror !== "" && data !== "" && item ===""){
+                setMessage("1)" + dataerror +" 2) Empty item")
+            }
+            if(dataerror === "" && data !== "" && item ===""){
+                setMessage("Empty item")
+            }
+            if(dataerror === "" && data === "" && item !==""){
+                setMessage("Empty data")
+            }
+            if(data !== "" && item !=="" && message === "" && dataerror ===""){
+                alert('An element was added to list ' + (item + ", " + data));
+                props.handleSetTodos(todos => [...todos, (<div key={item}>{item}, {data}</div>)]);
+                setItem("")
+                setData("")
+                console.log(item, data)
+            }
         }
         //testing /clear, why doesn't work?
         //setItem("")
@@ -22,22 +43,14 @@ const TodoForm = (props) => {
         //testingerrors
         //toggleClick(false)
     }
-    /*const checkError = (event) =>{
-        event.preventDefault()
-        if (validator.isDate(data) && item != "") {
-            handleSubmit(event)
-        } else {
-
-        }
-    }*/
 
     return(
         <label>
-            <FormToDoItem handleValueItemChange = {setItem} value={item} ></FormToDoItem>
-            <FormToDoData handleValueDataChange = {setData} handleValErrors = {setValidationError} value={data}></FormToDoData>
+            <FormToDoItem handleValueItemChange = {setItem} handleClearErrors = {setMessage} value={item} ></FormToDoItem>
+            <FormToDoData handleValueDataChange = {setData} handleValErrors = {setDataValidationError}  handleClearErrors = {setMessage} value={data}></FormToDoData>
             <button type="submit" onClick={handleSubmit} >Add to list</button>
             <div>
-                <FormToDoMessage value={error}>{error}</FormToDoMessage>
+                <FormToDoMessage value={message}></FormToDoMessage>
             </div>
         </label>
     )
