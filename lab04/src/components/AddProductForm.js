@@ -1,7 +1,8 @@
 import {useState} from "react";
 import axios from "axios";
+import { v4 as uuidv4 } from 'uuid';
 
-const ProductForm = (props) =>{
+const AddProductForm = (props) =>{
     const [title, setTitle] = useState("")
     const [price, setPrice] = useState("")
     const [category, setCategory] = useState("")
@@ -9,6 +10,7 @@ const ProductForm = (props) =>{
     const [image, setImage] = useState(null)
     const [rate, setRate] = useState("")
     const [count, setCount] = useState("")
+    const [keyg, setKey] = useState("")
 
     const handleTitleChange = (event) =>{
         setTitle(event.target.value)
@@ -36,7 +38,7 @@ const ProductForm = (props) =>{
         event.preventDefault()
         axios
             .post('https://fakestoreapi.com/products', {
-                name: name,
+                title: title,
                 price: price,
                 category: category,
                 description: description,
@@ -49,14 +51,21 @@ const ProductForm = (props) =>{
             .then(response => {
                 console.log(response.status)
                 if(response.status===200){
-                    props.setProducts(products => [...products, 
-                        <li key={id}>
-                            <div>Id: {id}</div>
-                            <div>Title: {title}</div>
-                            <div>Price: {title}</div>
-                            <div>Category: {category}</div>
-                        </li>
+                    setKey(uuidv4())
+                    props.addProduct(products => [...products, 
+                        {
+                            title: title,
+                            price: price,
+                            category: category,
+                            description: description,
+                            image: image,
+                            rating: {
+                                rate: rate,
+                                count: count
+                            }
+                        }
                     ])
+                    console.log(props.value)
                 }
             })
             .catch(err => console.log(err))
@@ -85,4 +94,4 @@ const ProductForm = (props) =>{
         </label>
     )
 }
-export default ProductForm
+export default AddProductForm

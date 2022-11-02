@@ -1,6 +1,6 @@
 import {useState, useEffect} from "react";
 import axios from "axios";
-import ProductForm from "./ProductForm";
+import ProductForm from "./AddProductForm";
 
 
 const Main = () =>{
@@ -21,7 +21,7 @@ const Main = () =>{
                     <div>Category: {item.category}</div>
                 </li>))}
             </ul>
-            <ProductForm addProduct = {setProducts}/>
+            <ProductForm addProduct={setProducts}/>
           </div>
       )
 }
