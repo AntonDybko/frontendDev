@@ -73,6 +73,7 @@ const AddProductForm = (props) =>{
     
     return(
         <label>
+            <h2>*Add Product*</h2>
             <div>Title:</div>
             <input type="text" onChange={handleTitleChange}></input>
             <div>Price:</div>
