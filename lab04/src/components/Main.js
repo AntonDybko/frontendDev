@@ -10,7 +10,7 @@ const Main = () =>{
         axios
             .get('https://fakestoreapi.com/products')
             .then(response => setProducts(response.data))
-      }, [products]);
+      }, []);
     
       return(
           <div>

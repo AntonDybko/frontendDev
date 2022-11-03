@@ -51,9 +51,10 @@ const AddProductForm = (props) =>{
             .then(response => {
                 console.log(response.status)
                 if(response.status===200){
-                    setKey(uuidv4())
+                    let key = uuidv4()//setKey(uuidv4())
                     props.addProduct(products => [...products, 
                         {
+                            id: key,
                             title: title,
                             price: price,
                             category: category,
