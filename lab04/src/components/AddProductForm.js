@@ -10,7 +10,6 @@ const AddProductForm = (props) =>{
     const [image, setImage] = useState(null)
     const [rate, setRate] = useState("")
     const [count, setCount] = useState("")
-    const [keyg, setKey] = useState("")
 
     const handleTitleChange = (event) =>{
         setTitle(event.target.value)
