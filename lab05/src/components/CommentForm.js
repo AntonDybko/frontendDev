@@ -47,7 +47,6 @@ const CommentForm = (props) => {
                 .then(response => {
                     console.log(response.status)
                     if(response.status===201){
-                        //check if a new comment was 'added'
                         props.handleSetComments(comments => 
                             [...comments, {
                                 postId: values.id,
