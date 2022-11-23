@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 const CompGameForm = (props) => {
     const formik = useFormik({
-        initialValues: {id: '', author: '', name: '', price: '', description: '', system_requirements: ''},
+        initialValues: {id: '', author: '', name: '', price: '', description: '', system_requirements: '', notes: []},
         handleReset: initialValues => {
             initialValues.name = '';
             initialValues.price = '';
@@ -24,7 +24,8 @@ const CompGameForm = (props) => {
                     name: values.name,
                     price: values.price,
                     description: values.description,
-                    system_requirements: values.system_requirements
+                    system_requirements: values.system_requirements,
+                    notes: values.notes
                 }])
             values.name='';
             values.price='';

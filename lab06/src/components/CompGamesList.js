@@ -4,8 +4,7 @@ import CompGameUpdate from "./CompGameUpdate";
 import {
     Routes,
     Route,
-    Link,
-    useLocation 
+    Link
 } from "react-router-dom";
 
 const CompGamesList = (props) => {
@@ -29,7 +28,7 @@ const CompGamesList = (props) => {
                     </div>
                     <hr/>
                     <Routes>
-                        <Route path={`:${game.id}`} element={
+                        <Route path={`:${game.id}/*`} element={
                             <CompGameUpdate game={game} handleChangeGame={props.handleSetGames}/>
                         }/>
                     </Routes>
