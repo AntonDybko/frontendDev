@@ -61,9 +61,9 @@ const CompGameUpdate = (props) => {
             <h3>Notes</h3>
             <Link to={`notes`}>View notes</Link>
             <Routes>
-                <Route path={`notes`} element={
+                <Route path={`notes/*`} element={
                     <div>
-                        <NoteList handleGameNotes={props.handleChangeGame} notes={props.game.notes}/>
+                        <NoteList handleGameNotes={props.handleChangeGame} game={props.game}/>
                         <NoteForm handleGameNotes={props.handleChangeGame} game={props.game}/>
                     </div>
                 }/>
