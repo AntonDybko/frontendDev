@@ -15,6 +15,7 @@ import {
   Link
 } from "react-router-dom";
 import CompGameForm from '../../components/CompGameForm';
+import CompGamesList from '../../components/CompGamesList';
 
 export function Counter() {
   const games = useSelector(getGames);
@@ -25,16 +26,28 @@ export function Counter() {
   //const incrementValue = Number(incrementAmount) || 0;
 
   return (
-    <div>
-      <CompGameForm></CompGameForm>
-      <ul>
-        {games.map(game => (
-            <li key={game.id}>
-                <div>Name: {game.name}</div>
-                <div>Price: {game.price}</div>
-            </li>
-        ))}
-      </ul>
-    </div>
+    <Router>
+            <div>
+                <ul>
+                    <li>
+                        <Link to="/form">Form</Link>
+                    </li>
+                    <li>
+                        <Link to="/list">List</Link>
+                    </li>
+                </ul>
+
+                <hr/>
+
+                <Routes>
+                    <Route path="/form" element={
+                        <CompGameForm />
+                    }/>
+                    <Route path="/list/*" element={
+                        <CompGamesList />
+                    }/>
+                </Routes>
+            </div>
+        </Router>
   );
 }

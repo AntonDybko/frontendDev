@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { v4 as uuidv4 } from 'uuid';
-import {  useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
     decrement,
     addToState,
@@ -11,7 +11,7 @@ import {
     selectCount,
   } from '../features/counter/counterSlice';
 
-const CompGameForm = (props) => {
+const CompGameForm = () => {
     const dispatch = useDispatch();
     const formik = useFormik({
         initialValues: {id: '', author: '', name: '', price: '', description: '', system_requirements: '', notes: []},
@@ -38,11 +38,11 @@ const CompGameForm = (props) => {
                     notes: values.notes
                 }
             ))
-            /*values.name='';
+            values.name='';
             values.price='';
             values.author='';
             values.description='';
-            values.system_requirements='';*/
+            values.system_requirements='';
 
         }
     });

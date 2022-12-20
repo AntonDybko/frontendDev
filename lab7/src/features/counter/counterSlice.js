@@ -26,16 +26,70 @@ export const counterSlice = createSlice({
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     addToState: (state, game) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      //state.value += 1;
       state.games.push(game.payload)
-      console.log(game)
-      console.log(game.type)
-      console.log(game.payload)
     },
+    deleteGame: (state, name) => {
+      state.games = state.games.filter(item => item.name !== name.payload)
+    },
+    updateGame: (state, action) => {
+      let id = action.payload.id
+      let selected_game = action.payload.selected_game
+      state.games = state.games.map(game => {
+        if(game.id === id){
+            return {
+                id: game.id,
+                author: selected_game.author,
+                name: selected_game.name,
+                price: selected_game.price,
+                description: selected_game.description,
+                system_requirements: selected_game.system_requirements,
+                notes: game.notes
+            }
+        }else{
+            return game
+        }
+      })
+    },
+    addNote: (state, action) => {
+      let curr_game = action.payload.game;
+      let note = action.payload.note;
+      console.log(note)
+      console.log(curr_game)
+      state.games = state.games.map(game => {
+        if(game.id === curr_game.id){
+            return {
+                id: curr_game.id,
+                author: curr_game.author,
+                name: curr_game.name,
+                price: curr_game.price,
+                description: curr_game.description,
+                system_requirements: curr_game.system_requirements,
+                notes: [...curr_game.notes, note]
+            }
+        }else{
+            return game
+        }
+      })
+    },
+    handleNote: (state, action) => {
+      const id = action.payload.id;
+      const newNotes = action.payload.newNotes;
+      state.games = state.games.map(game =>{
+        if(game.id !== id){
+            return game;
+        }else{
+            return {
+                id: game.id,
+                author: game.author,
+                name: game.name,
+                price: game.price,
+                description: game.description,
+                system_requirements: game.system_requirements,
+                notes: newNotes
+            }
+        }
+      })
+    }
     // Use the PayloadAction type to declare the contents of `action.payload`
     /*incrementByAmount: (state, action) => {
       state.value += action.payload;
@@ -55,7 +109,7 @@ export const counterSlice = createSlice({
   },*/
 });
 
-export const { addToState/*, incrementByAmount */} = counterSlice.actions;
+export const { addToState, updateGame, deleteGame, addNote, handleNote/*, incrementByAmount */} = counterSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
