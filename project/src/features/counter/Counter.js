@@ -1,12 +1,7 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  getGames,
   addToState,
-  incrementByAmount,
-  incrementAsync,
-  incrementIfOdd,
-  selectCount,
+  fetchGames
 } from './counterSlice';
 import {
   BrowserRouter as Router,
@@ -14,16 +9,18 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import {useEffect} from 'react';
 import CompGameForm from '../../components/CompGameForm';
 import CompGamesList from '../../components/CompGamesList';
+import axios from 'axios'
 
 export function Counter() {
-  const games = useSelector(getGames);
   const dispatch = useDispatch();
+
 
   return (
     <Router>
-            <div>
+            <div class='mainrout'>
                 <ul>
                     <li>
                         <Link to="/form">Form</Link>
