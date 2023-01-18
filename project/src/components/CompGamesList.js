@@ -40,6 +40,15 @@ import {  useDispatch, useSelector } from 'react-redux';
             'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com'
         }
     };
+    axios.request(options).then(function (response) {
+        response.data.forEach(game => {
+            game.notes = [];
+            let currgame = games.filter(x => x.id === game.id) //test
+            if(currgame.length === 0){
+                dispatch(addToState(game));
+            }
+        })
+    });
     function fetchData() {
         axios.request(options).then(function (response) {
             response.data.forEach(game => {
