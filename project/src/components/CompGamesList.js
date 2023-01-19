@@ -22,8 +22,16 @@ import {  useDispatch, useSelector } from 'react-redux';
     //const [games, setGames] = useState([...useSelector(getGames)]);
     const games = [...useSelector(getGames)]
     const handleDeleteGame = (event) =>{
-        const title = event.target.getAttribute("title")
-        dispatch(deleteGame(title))
+        const id = event.target.getAttribute("id")
+        console.log(id)//test
+        axios.delete(`http://localhost:8080/${id}`).then(res => {
+            console.log(res.status, res.data)
+            if(res.status === 204){
+                dispatch(deleteGame(id))
+            }else{
+                //allet?tost?
+            }
+        })
     }
     const handleSortByTitle = (e) =>{
         dispatch(sortByTitle())
@@ -31,28 +39,19 @@ import {  useDispatch, useSelector } from 'react-redux';
     const handleSortByDate = (e) =>{
         dispatch(sortByDate())
     }
-    const options = {
-        method: 'GET',
-        url: 'https://free-to-play-games-database.p.rapidapi.com/api/filter',
-        params: {tag: '3d.mmorpg.fantasy.pvp', platform: 'pc'},
-        headers: {
-            'X-RapidAPI-Key': '10f7ad6edamshb85b099a1a349d7p113413jsna8336fc9b1bd',
-            'X-RapidAPI-Host': 'free-to-play-games-database.p.rapidapi.com'
-        }
-    };
-    axios.request(options).then(function (response) {
-        response.data.forEach(game => {
-            game.notes = [];
-            let currgame = games.filter(x => x.id === game.id) //test
-            if(currgame.length === 0){
-                dispatch(addToState(game));
-            }
-        })
-    });
-    function fetchData() {
-        axios.request(options).then(function (response) {
+    if(games.length ===0 ){
+        axios.get("http://localhost:8080/").then(function (response) {
+            console.log(response.data)
             response.data.forEach(game => {
-                game.notes = [];
+                dispatch(addToState(game));
+            })
+        })
+    }
+    
+    function fetchData() {
+        axios.get("http://localhost:8080/").then(function (response) {
+            console.log(response.data)
+            response.data.forEach(game => {
                 console.log('fetchtest')
                 let currgame = games.filter(x => x.id === game.id) //test
                 if(currgame.length === 0){
@@ -70,18 +69,18 @@ import {  useDispatch, useSelector } from 'react-redux';
             <ul>
                 {games.map(game => (
                     
-                    <li key={game.title}>
+                    <li key={game.id}>
                         <div>Name: {game.title}</div>
                         <img src={game.thumbnail}></img>
                         <div>Genre: {game.genre}</div>
                         <div>Publisher: {game.publisher}</div>
-                        <Link to={`:${game.title}`}>More...</Link>
+                        <Link to={`:${game.id}`}>More...</Link>
                         <div>
-                            <button type="button" title={game.title} onClick={handleDeleteGame}>Delete</button>
+                            <button type="button" id={game.id} onClick={handleDeleteGame}>Delete</button>
                         </div>
                         <hr/>
                         <Routes>
-                            <Route path={`:${game.title}/*`} element={
+                            <Route path={`:${game.id.toString()}/*`} element={
                                 <CompGameUpdate game={game} />
                             }/>
                         </Routes>

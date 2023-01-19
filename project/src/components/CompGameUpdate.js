@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import NoteList from './notatki/NoteList';
 import NoteForm from './notatki/NoteForm';
 import { useDispatch } from 'react-redux';
+import axios from "axios";
 //import * as Yup from 'yup';
 import {
     Routes,
@@ -10,8 +11,10 @@ import {
     Link
 } from "react-router-dom";
 import {
-    updateGame
+    updateGame,
+    asyncUpdateGame
 } from '../features/counter/counterSlice';
+
 
 const validate = (values) => {
     const errors = {};
@@ -50,27 +53,7 @@ const validate = (values) => {
     }
     return errors;
 }
-/*const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
-const SignupSchema = Yup.object().shape({
-    title: Yup.string()
-        .min(1, 'Too Short!')
-        .max(40, 'Too Long!')
-        .required()
-        .required('Required'),
-    freetogame_profile_url: Yup.string().required('Required'),
-    game_url: Yup.string().required('Required'),
-    genre: Yup.string().required('Required'),
-    platform: Yup.string().required('Required'),
-    publisher: Yup.string().required('Required'),
-    short_description: Yup.string()
-        .min(1, 'Too Short!')
-        .max(120, 'Too Long!')
-        .required('Required'),
-    release_date: Yup.date().required('Required'),
-    thumbnail: Yup.mixed()
-        .nullable()
-        .required('Required')
-})*/
+
 const CompGameUpdate = (props) => {
     const dispatch = useDispatch();
     const formik = useFormik({
@@ -89,9 +72,9 @@ const CompGameUpdate = (props) => {
         },
         //validationSchema: SignupSchema,
         validate,
-        onSubmit: values => {
+        onSubmit: async values => {
             alert("Updated");
-            console.log(JSON.stringify(values, null, 2));
+            //console.log(JSON.stringify(values, null, 2));
             let action = {
                 id: props.game.id,
                 selected_game: {
@@ -106,7 +89,7 @@ const CompGameUpdate = (props) => {
                     thumbnail: values.thumbnail,
                 }
             }
-            dispatch(updateGame(action))
+            dispatch(asyncUpdateGame(props.game.id, action.selected_game))
 
         },
         validateOnChange: false,
@@ -166,8 +149,8 @@ const CompGameUpdate = (props) => {
                 {formik.errors.short_description ? <div>{formik.errors.short_description}</div> : null}
 
                 <label>image</label>
-                <div><img class="thumbnail" src={formik.values.thumbnail}></img></div>
-                <div><input class='imginput' type='file' name='thumbnail' onChange={e =>{
+                <div><img className="thumbnail" src={formik.values.thumbnail}></img></div>
+                <div><input className='imginput' type='file' name='thumbnail' onChange={e =>{
                     const fileReader = new FileReader();
                     fileReader.onload = () => {
                       if (fileReader.readyState === 2) {

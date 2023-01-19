@@ -2,6 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch } from 'react-redux';
+import axios from "axios";
 import {
     addToState,
   } from '../features/counter/counterSlice';
@@ -53,21 +54,28 @@ const CompGameForm = () => {
             alert("Dodano");
             values.id = uuidv4()
             console.log(JSON.stringify(values, null, 2));
-            dispatch(addToState(
-                {
-                    id: values.id,
-                    freetogame_profile_url: values.freetogame_profile_url, 
-                    title: values.title, 
-                    game_url: values.game_url, 
-                    genre: values.genre, 
-                    platform: values.platform, 
-                    publisher: values.publisher, 
-                    release_date: values.release_date, 
-                    short_description: values.short_description,
-                    thumbnail: values.thumbnail,
+            let newgame = {
+                id: values.id,
+                freetogame_profile_url: values.freetogame_profile_url, 
+                title: values.title, 
+                game_url: values.game_url, 
+                genre: values.genre, 
+                platform: values.platform, 
+                publisher: values.publisher, 
+                release_date: values.release_date, 
+                short_description: values.short_description,
+                thumbnail: values.thumbnail,
+                notes: []
+            }
+            axios.post(`http://localhost:8080/`, newgame).then(res => {
+                console.log(res.status, res.data)
+                if(res.status === 201){
+                    dispatch(addToState(newgame))
+                    resetForm({values: ''})
+                }else{
+                    //allet?tost?
                 }
-            ))
-            resetForm({values: ''})
+            })
 
         },
         validateOnChange: false,
@@ -125,7 +133,7 @@ const CompGameForm = () => {
 
             <label>image</label>
             <div><img src={formik.values.thumbnail}></img></div>
-            <div><input class="imginput" type='file' name='thumbnail' onChange={e =>{
+            <div><input className="imginput" type='file' name='thumbnail' onChange={e =>{
                 const fileReader = new FileReader();
                 fileReader.onload = () => {
                     if (fileReader.readyState === 2) {

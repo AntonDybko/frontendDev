@@ -2,6 +2,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch } from 'react-redux';
+import axios from "axios";
 import {
     addNote
 } from '../../features/counter/counterSlice';
@@ -39,9 +40,19 @@ const NoteForm = (props) => {
                 },
                 game: props.game
             }
-            dispatch(addNote(action))
+            axios.post(`http://localhost:8080/${props.game.id}`, action.note).then(res => {
+                console.log(res.status, res.data)
+                if(res.status === 204){
+                    dispatch(addNote(action))
+                    values.tresc='';
+                    values.mark = '';
+                }else{
+                    //allet?tost?
+                } 
+            })
+            /*dispatch(addNote(action))
             values.tresc='';
-            values.mark = '';
+            values.mark = '';*/
 
         },
         validate,

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
+import axios from "axios";
 import {
     handleNote
 } from '../../features/counter/counterSlice';
@@ -28,15 +29,18 @@ const NoteDetails = (props) => {
         initialValues: { data: props.note.data, tresc: props.note.tresc, mark: props.note.mark},
         onSubmit: values => {
             values.data = (new Date()).getTime();
+            let newNote = {
+                id: props.note.id,
+                data: values.data,
+                tresc: values.tresc,
+                mark: parseInt(values.mark),
+            }
             const newNotes = props.game.notes.map(note =>{
                 if(note.id !== props.note.id){
                     return note;
                 }else{
                     return {
-                        id: props.note.id,
-                        data: values.data,
-                        tresc: values.tresc,
-                        mark: parseInt(values.mark),
+                        newNote
                     }
                 }
             })
@@ -44,7 +48,17 @@ const NoteDetails = (props) => {
                 id: props.game.id,
                 newNotes: newNotes
             }
-            dispatch(handleNote(action))
+            axios
+            .put(`http://localhost:8080/${props.game.id}/${props.note.id}`, newNote)
+            .then(res => {
+                console.log(res.status, res.data)
+                if(res.status === 200){
+                    dispatch(handleNote(action))
+                }else{
+                    //allet?tost?
+                } 
+            })
+            //dispatch(handleNote(action))
         },
         validate,
         validateOnChange: false,

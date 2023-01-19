@@ -1,4 +1,5 @@
 import NoteDetails from "./NoteDetails";
+import axios from "axios";
 import {
     Routes,
     Route,
@@ -14,13 +15,21 @@ import {
 const NoteList = (props) => {
     const dispatch = useDispatch();
     const handleDeleteNote = (event) =>{
-        const data = parseInt(event.target.getAttribute("data"));
-        const newNotes = props.game.notes.filter(note => note.data !== data);
+        const id = event.target.getAttribute("id");
+        const newNotes = props.game.notes.filter(note => note.id !== id);
         const action = {
             id: props.game.id,
             newNotes: newNotes
         }
-        dispatch(handleNote(action))
+        axios.delete(`http://localhost:8080/${props.game.id}/${id}`).then(res => {
+            console.log(res.status, res.data)
+            if(res.status === 204){
+                dispatch(handleNote(action))
+            }else{
+                //allet?tost?
+            } 
+        })
+        //dispatch(handleNote(action))
     }
     const handleSortByDate = (e) =>{
         console.log(props.game.title)
@@ -41,7 +50,7 @@ const NoteList = (props) => {
                         <div>mark: {note.mark}</div>
                         <Link to={`:${note.id}`}>Details</Link>
                         <div>
-                            <button type="button" data={note.data} onClick={handleDeleteNote}>Delete</button>
+                            <button type="button" id={note.id} onClick={handleDeleteNote}>Delete</button>
                         </div>
                         <hr/>
                         <Routes>

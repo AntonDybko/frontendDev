@@ -9,7 +9,7 @@ const container = document.getElementById('root');
 const root = createRoot(container);
 
 root.render(
-  <div class="mainrout">
+  <div className="mainrout">
     <Provider store={store}>
       <App />
     </Provider>

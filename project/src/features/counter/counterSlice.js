@@ -1,13 +1,33 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 //import { fetchCount } from './counterAPI';
-//import axios from 'axios'
+//import thunkMiddleware from 'redux-thunk'
+import axios from 'axios'
 
+/*if(response.status === 200){
+      const action ={
+        id: gameId,
+        selected_game: updatedGame
+      } 
+      dispatch(updateGame(action))
+    }*/
+    /*console.log(response.status, response.data, "????")
+    const action ={
+      id: gameId,
+      selected_game: updatedGame
+    } */
+
+/*const asyncUpdateGame = createAsyncThunk(
+  'counter/updateGame',
+  async (gameId, updatedGame, thunkAPI) => {
+    const response = await axios.put(`http://localhost:8080/${gameId}`, updatedGame)
+    return response.data
+  }
+)*/
 
 const initialState = {
   status: 'idle',
   games: []
 }
-
 
 export const counterSlice = createSlice({
   name: 'counter',
@@ -18,10 +38,34 @@ export const counterSlice = createSlice({
       console.log(game)
       state.games.push(game.payload)
     },
-    deleteGame: (state, title) => {
-      state.games = state.games.filter(item => item.title !== title.payload)
+    deleteGame: (state, id) => {
+      state.games = state.games.filter(item => item.id.toString() !== id.payload.toString())
     },
+    /*updateGame: (state, action) => {
+      let id = action.payload.id
+      let selected_game = action.payload.selected_game
+      state.games = state.games.map(game => {
+        if(game.id === id){
+            return {
+                id: game.id,
+                freetogame_profile_url: selected_game.freetogame_profile_url, 
+                title: selected_game.title, 
+                game_url: selected_game.game_url, 
+                genre: selected_game.genre, 
+                platform: selected_game.platform, 
+                publisher: selected_game.publisher, 
+                release_date: selected_game.release_date, 
+                short_description: selected_game.short_description,
+                thumbnail: selected_game.thumbnail,
+                notes: game.notes
+            }
+        }else{
+            return game
+        }
+      })
+    },*/
     updateGame: (state, action) => {
+      console.log(action)
       let id = action.payload.id
       let selected_game = action.payload.selected_game
       state.games = state.games.map(game => {
@@ -139,6 +183,34 @@ export const counterSlice = createSlice({
       })
     },
   },
+  /*extraReducers: (builder) => {
+    // Add reducers for additional action types here, and handle loading state as needed
+    builder.addCase(asyncUpdateGame.fulfilled, (state, action) => {
+      // Add user to the state array
+      console.log(action)
+      let id = action.payload.id
+      let selected_game = action.payload.selected_game
+      state.games = state.games.map(game => {
+        if(game.id === id){
+            return {
+                id: game.id,
+                freetogame_profile_url: selected_game.freetogame_profile_url, 
+                title: selected_game.title, 
+                game_url: selected_game.game_url, 
+                genre: selected_game.genre, 
+                platform: selected_game.platform, 
+                publisher: selected_game.publisher, 
+                release_date: selected_game.release_date, 
+                short_description: selected_game.short_description,
+                thumbnail: selected_game.thumbnail,
+                notes: game.notes
+            }
+        }else{
+            return game
+        }
+      })
+    })
+  },*/
 
 });
 
@@ -146,6 +218,26 @@ export const { addToState, updateGame, deleteGame, addNote, handleNote, sortByTi
 
 
 export const getGames = (state) => state.counter.games;
+export const asyncUpdateGame = (gameId, updatedGame) => async dispatch => {
+  axios.put(`http://localhost:8080/${gameId}`, updatedGame).then((res)=>{
+    console.log(res.data)
+    dispatch(updateGame({id: gameId, selected_game: updatedGame}))
+  })
+}
+
+  /*console.log(game.status, game.data, "????")
+  if(game.status === 200){
+      dispatch(updateGame(updatedGame))
+  }else{
+      //allet?tost?
+  } */
+
+
+/*export const loadGames = () => async (dispatch, getState) => {
+  const item = await axios.get(`https://jsonplaceholder.typicode.com/comments/${itemId}`)
+  dispatch(fetchBody(item.data.body))
+}*/
+
 /*export const fetchGames = () => (dispatch, getState) =>{
   const options = {
       method: 'GET',
