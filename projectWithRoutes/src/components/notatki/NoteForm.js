@@ -2,11 +2,9 @@ import React from 'react';
 import { useFormik } from 'formik';
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch } from 'react-redux';
-import axios from "axios";
 import {
-    addNote,
     asyncAddNote
-} from '../../features/counter/counterSlice';
+} from '../../features/counter/gamesSlice';
 
 const validate = (values) => {
     const errors = {};
@@ -26,12 +24,14 @@ const validate = (values) => {
 }
 const NoteForm = (props) => {
     const dispatch = useDispatch();
+
     const formik = useFormik({
         initialValues: {id: '' , data: '', tresc: '', mark: ''},
         onSubmit: (values, {resetForm}) => {
+            alert("Note added");
             values.id = uuidv4()
             values.data = (new Date()).getTime();
-            console.log(JSON.stringify(values, null, 2));
+
             const note = {
                 id: values.id,
                 data: values.data,
@@ -40,19 +40,6 @@ const NoteForm = (props) => {
             }
             dispatch(asyncAddNote(props.game, note))
             resetForm()
-            /*axios.post(`http://localhost:8080/${props.game.id}`, action.note).then(res => {
-                console.log(res.status, res.data)
-                if(res.status === 204){
-                    dispatch(addNote(action))
-                    values.tresc='';
-                    values.mark = '';
-                }else{
-                    //allet?tost?
-                } 
-            })*/
-            /*dispatch(addNote(action))
-            values.tresc='';
-            values.mark = '';*/
 
         },
         validate,

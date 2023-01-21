@@ -1,10 +1,5 @@
-//import { useState } from "react"
-//import CompGameForm from "./CompGameForm";
-import CompGameUpdate from "./CompGameUpdate";
 import axios from 'axios'
 import {
-    Routes,
-    Route,
     Link
 } from "react-router-dom";
 import {
@@ -12,27 +7,19 @@ import {
     sortByDate,
     sortByTitle,
     addToState,
-    asyncDeleteGame
-  } from '../features/counter/counterSlice';
+    asyncDeleteGame,
+  } from '../features/counter/gamesSlice';
 import {  useDispatch, useSelector } from 'react-redux';
-//import {useState, useEffect} from 'react'
+
+
 
  const CompGamesList = () => {
     const dispatch = useDispatch();
-    //const [games, setGames] = useState([...useSelector(getGames)]);
     const games = [...useSelector(getGames)]
+
     const handleDeleteGame = (event) =>{
         const id = event.target.getAttribute("id")
-        console.log(id)//test
         dispatch(asyncDeleteGame(id))
-        /*axios.delete(`http://localhost:8080/${id}`).then(res => {
-            console.log(res.status, res.data)
-            if(res.status === 204){
-                dispatch(deleteGame(id))
-            }else{
-                //allet?tost?
-            }
-        })*/
     }
     const handleSortByTitle = (e) =>{
         dispatch(sortByTitle())
@@ -40,25 +27,21 @@ import {  useDispatch, useSelector } from 'react-redux';
     const handleSortByDate = (e) =>{
         dispatch(sortByDate())
     }
+
     if(games.length ===0 ){
         axios.get("http://localhost:8080/").then(function (response) {
-            console.log(response.data)
             response.data.forEach(game => {
-                let currgame = games.filter(x => x.id === game.id) //test
+                let currgame = games.filter(x => x.id === game.id) 
                 if(currgame.length === 0){
                   dispatch(addToState(game));
                 }
             })
         })
     }
-    
     function fetchData() {
         axios.get("http://localhost:8080/").then(function (response) {
-            console.log(response.data)
-            //games.pop()
             response.data.forEach(game => {
-                console.log('fetchtest')
-                let currgame = games.filter(x => x.id === game.id) //test
+                let currgame = games.filter(x => x.id === game.id) 
                 if(currgame.length === 0){
                   dispatch(addToState(game));
                 }
@@ -76,21 +59,15 @@ import {  useDispatch, useSelector } from 'react-redux';
                     
                     <li key={game.id}>
                         <div>Name: {game.title}</div>
-                        <img src={game.thumbnail}></img>
+                        <img src={game.thumbnail} alt="list"></img>
                         <div>Genre: {game.genre}</div>
                         <div>Publisher: {game.publisher}</div>
-                        <Link to={`:${game.id}`}>More...</Link>
+                        <Link to={`/list/${game.id}`} state={{ currgame: game }}>More...</Link>
                         <div>
                             <button type="button" id={game.id} onClick={handleDeleteGame}>Delete</button>
                         </div>
                         <hr/>
-                        <Routes>
-                            <Route path={`:${game.id.toString()}/*`} element={
-                                <CompGameUpdate game={game} />
-                            }/>
-                        </Routes>
                     </li>
-                    
                 ))}
             </ul>
         </div>

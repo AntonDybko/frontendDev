@@ -1,11 +1,10 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import axios from "axios";
 import {
-    handleNote,
     asyncUpdateNote
-} from '../../features/counter/counterSlice';
+} from '../../features/counter/gamesSlice';
+import { useLocation } from 'react-router-dom';
 
 const validate = (values) => {
     const errors = {};
@@ -24,26 +23,29 @@ const validate = (values) => {
     return errors;
 }
 
-const NoteDetails = (props) => {
+const NoteDetails = () => {
     const dispatch = useDispatch();
+    const location = useLocation()
+    const { currgame, currnote } = location.state
     const formik = useFormik({
-        initialValues: { data: props.note.data, tresc: props.note.tresc, mark: props.note.mark},
+        initialValues: { data: currnote.data, tresc: currnote.tresc, mark: currnote.mark},
         onSubmit: values => {
+            alert("Note updated");
             values.data = (new Date()).getTime();
             let newNote = {
-                id: props.note.id,
+                id: currnote.id,
                 data: values.data,
                 tresc: values.tresc,
                 mark: parseInt(values.mark),
             }
-            const newNotes = props.game.notes.map(note =>{
-                if(note.id !== props.note.id){
+            const newNotes = currgame.notes.map(note =>{
+                if(note.id !== currnote.id){
                     return note;
                 }else{
                     return newNote
                 }
             })
-            dispatch(asyncUpdateNote(props.game.id, newNote, newNotes))
+            dispatch(asyncUpdateNote(currgame.id, newNote, newNotes))
 
         },
         validate,
@@ -54,7 +56,8 @@ const NoteDetails = (props) => {
     return (
         <div>
             <form onSubmit={formik.handleSubmit}>
-                <div>Id: {props.note.id}</div>
+                <div>Id: {currnote.id}</div>
+                <div>Date: {currnote.data}</div>
                 <label>tresc</label>
                 <div>
                     <input type='text' name='tresc' onChange={formik.handleChange} onBlur={formik.handleBlur} value={formik.values.tresc} />

@@ -1,28 +1,6 @@
-import {createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-//import { fetchCount } from './counterAPI';
-//import thunkMiddleware from 'redux-thunk'
+import { createSlice } from '@reduxjs/toolkit';
+
 import axios from 'axios'
-
-/*if(response.status === 200){
-      const action ={
-        id: gameId,
-        selected_game: updatedGame
-      } 
-      dispatch(updateGame(action))
-    }*/
-    /*console.log(response.status, response.data, "????")
-    const action ={
-      id: gameId,
-      selected_game: updatedGame
-    } */
-
-/*const asyncUpdateGame = createAsyncThunk(
-  'counter/updateGame',
-  async (gameId, updatedGame, thunkAPI) => {
-    const response = await axios.put(`http://localhost:8080/${gameId}`, updatedGame)
-    return response.data
-  }
-)*/
 
 const initialState = {
   status: 'idle',
@@ -35,37 +13,12 @@ export const counterSlice = createSlice({
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
     addToState: (state, game) => {
-      console.log(game)
       state.games.push(game.payload)
     },
     deleteGame: (state, id) => {
       state.games = state.games.filter(item => item.id.toString() !== id.payload.toString())
     },
-    /*updateGame: (state, action) => {
-      let id = action.payload.id
-      let selected_game = action.payload.selected_game
-      state.games = state.games.map(game => {
-        if(game.id === id){
-            return {
-                id: game.id,
-                freetogame_profile_url: selected_game.freetogame_profile_url, 
-                title: selected_game.title, 
-                game_url: selected_game.game_url, 
-                genre: selected_game.genre, 
-                platform: selected_game.platform, 
-                publisher: selected_game.publisher, 
-                release_date: selected_game.release_date, 
-                short_description: selected_game.short_description,
-                thumbnail: selected_game.thumbnail,
-                notes: game.notes
-            }
-        }else{
-            return game
-        }
-      })
-    },*/
     updateGame: (state, action) => {
-      console.log(action)
       let id = action.payload.id
       let selected_game = action.payload.selected_game
       state.games = state.games.map(game => {
@@ -110,8 +63,8 @@ export const counterSlice = createSlice({
           return 0
       })
     },
-    sortNotesByDate: (state, title) =>{
-      let currentGameIndex = state.games.findIndex(game => game.title === title.payload)
+    sortNotesByDate: (state, gameId) =>{
+      let currentGameIndex = state.games.findIndex(game => game.id === gameId.payload)
       state.games[currentGameIndex].notes.sort((a, b) =>{
         if (a.data < b.data) {
             return -1;
@@ -122,8 +75,8 @@ export const counterSlice = createSlice({
         return 0
       })
     },
-    sortNotesByMark: (state, title) =>{
-      let currentGameIndex = state.games.findIndex(game => game.title === title.payload)
+    sortNotesByMark: (state, gameId) =>{
+      let currentGameIndex = state.games.findIndex(game => game.id === gameId.payload)
       state.games[currentGameIndex].notes.sort((a, b) =>{
         if (a.mark < b.mark) {
             return 1;
@@ -137,8 +90,6 @@ export const counterSlice = createSlice({
     addNote: (state, action) => {
       let curr_game = action.payload.game;
       let note = action.payload.note;
-      console.log(note)
-      console.log(curr_game)
       state.games = state.games.map(game => {
         if(game.id === curr_game.id){
             return {
@@ -162,7 +113,6 @@ export const counterSlice = createSlice({
     handleNote: (state, action) => {
       const id = action.payload.id;
       const newNotes = action.payload.newNotes;
-      console.log(newNotes)
       state.games = state.games.map(game =>{
         if(game.id !== id){
             return game;
@@ -184,41 +134,19 @@ export const counterSlice = createSlice({
       })
     },
   },
-  /*extraReducers: (builder) => {
-    // Add reducers for additional action types here, and handle loading state as needed
-    builder.addCase(asyncUpdateGame.fulfilled, (state, action) => {
-      // Add user to the state array
-      console.log(action)
-      let id = action.payload.id
-      let selected_game = action.payload.selected_game
-      state.games = state.games.map(game => {
-        if(game.id === id){
-            return {
-                id: game.id,
-                freetogame_profile_url: selected_game.freetogame_profile_url, 
-                title: selected_game.title, 
-                game_url: selected_game.game_url, 
-                genre: selected_game.genre, 
-                platform: selected_game.platform, 
-                publisher: selected_game.publisher, 
-                release_date: selected_game.release_date, 
-                short_description: selected_game.short_description,
-                thumbnail: selected_game.thumbnail,
-                notes: game.notes
-            }
-        }else{
-            return game
-        }
-      })
-    })
-  },*/
+
+
 
 });
 
 export const { addToState, updateGame, deleteGame, addNote, handleNote, sortByTitle, sortByDate, sortNotesByDate, sortNotesByMark /*fetchGames*/} = counterSlice.actions;
 
 
-export const getGames = (state) => state.counter.games;
+export const getGames = (state) => {
+  return state.counter.games
+}
+
+
 export const asyncAddGame = (game) => async dispatch => {
   axios.post(`http://localhost:8080/`, game).then((res)=>{
     dispatch(addToState(game))
@@ -262,8 +190,5 @@ export const asyncDeleteNote= (gameId, noteId, newNotes) => async dispatch => {
     dispatch(handleNote(action))
   })
 }
-
-
-
 
 export default counterSlice.reducer;

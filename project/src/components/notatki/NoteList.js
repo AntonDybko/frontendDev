@@ -7,9 +7,9 @@ import {
 } from "react-router-dom";
 import { useDispatch } from 'react-redux';
 import {
-    handleNote,
     sortNotesByDate,
-    sortNotesByMark
+    sortNotesByMark,
+    asyncDeleteNote
 } from '../../features/counter/counterSlice';
 
 const NoteList = (props) => {
@@ -17,18 +17,7 @@ const NoteList = (props) => {
     const handleDeleteNote = (event) =>{
         const id = event.target.getAttribute("id");
         const newNotes = props.game.notes.filter(note => note.id !== id);
-        const action = {
-            id: props.game.id,
-            newNotes: newNotes
-        }
-        axios.delete(`http://localhost:8080/${props.game.id}/${id}`).then(res => {
-            console.log(res.status, res.data)
-            if(res.status === 204){
-                dispatch(handleNote(action))
-            }else{
-                //allet?tost?
-            } 
-        })
+        dispatch(asyncDeleteNote(props.game.id, id, newNotes))
         //dispatch(handleNote(action))
     }
     const handleSortByDate = (e) =>{

@@ -1,9 +1,15 @@
-import express from "express"
-import bodyParser from 'body-parser';//???
-import axios from "axios"
-import cors from "cors"
-import fs from "fs"
-import { v4 as uuidv4 } from 'uuid';
+const express = require("express")
+const cors = require("cors")
+const fs = require("fs")
+const bodyParser = require("body-parser")
+//import cors from "cors"
+//import fs from "fs"
+//import express from "express"
+//import bodyParser from 'body-parser';//???
+//import axios from "axios"
+//import cors from "cors"
+//import fs from "fs"
+//import { v4 as uuidv4 } from 'uuid';
 
 var app = express();
 app.use(bodyParser.json());
@@ -85,6 +91,7 @@ app.put("/:id", function(req, res){
     //res.status(200).json(gameToUpdate)
 })
 app.put("/:gameId/:noteId", function(req, res){
+    console.log("note update")
     let gameId = req.params.gameId
     let noteId = req.params.noteId
 
@@ -95,6 +102,7 @@ app.put("/:gameId/:noteId", function(req, res){
     let noteToUpdate = gameWithNote.notes.find(note => note.id===noteId)
     let noteIndex = gameWithNote.notes.indexOf(noteToUpdate)
     console.log(noteToUpdate)
+    console.log(req.body)
 
     Object.assign(noteToUpdate, req.body)
     games[gameIndex].notes[noteIndex] = noteToUpdate
@@ -106,6 +114,7 @@ app.put("/:gameId/:noteId", function(req, res){
 })
 
 app.delete("/:id", function(req, res){
+    console.log("note deletion")
     let id = req.params.id
     let gameToDelete = games.find(game => game.id ===id)
     console.log(gameToDelete)
@@ -135,9 +144,8 @@ app.delete("/:gameId/:noteId", function(req, res){
         res.status(404).json("fail to search note")
     }
     let noteIndex = gameWithNote.notes.indexOf(noteToDelete)
-    console.log(deletion)
     games[gameIndex].notes.splice(noteIndex, 1)
-
+    console.log("?????")
     fs.writeFile('./data/games.json', JSON.stringify(games), (err) =>{
         res.status(204).json(null)
     })

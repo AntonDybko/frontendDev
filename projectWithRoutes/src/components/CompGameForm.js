@@ -2,11 +2,9 @@ import React from 'react';
 import { useFormik } from 'formik';
 import { v4 as uuidv4 } from 'uuid';
 import { useDispatch } from 'react-redux';
-import axios from "axios";
 import {
-    addToState,
     asyncAddGame
-  } from '../features/counter/counterSlice';
+  } from '../features/counter/gamesSlice';
 
 const validate = (values) => {
     const errors = {};
@@ -32,14 +30,16 @@ const validate = (values) => {
     }
     if(!values.short_description){
         errors.short_description = 'Required'
-    }else if(values.short_description.length > 120 || values.short_description.length ===1) {
-        errors.short_description = 'Must be more then 1 character and less then 60';
+    }else if(values.short_description.length > 300 || values.short_description.length <=1) {
+        errors.short_description = 'Must be more then 1 character and less then 300';
     }
     if(!values.release_date){
         errors.release_date = 'Required'
     }
     if(!values.thumbnail){
         errors.thumbnail = 'Required'
+    }else if(values.thumbnail.length > 80000) {
+        errors.thumbnail = 'Image is too big';
     }
     return errors;
 }
@@ -52,9 +52,8 @@ const CompGameForm = () => {
         },
         validate,
         onSubmit: (values, {resetForm}) => {
-            alert("Dodano");
+            alert("Game added");
             values.id = uuidv4()
-            console.log(JSON.stringify(values, null, 2));
             let newgame = {
                 id: values.id,
                 freetogame_profile_url: values.freetogame_profile_url, 
@@ -126,7 +125,7 @@ const CompGameForm = () => {
             {formik.errors.short_description ? <div>{formik.errors.short_description}</div> : null}
 
             <label>image</label>
-            <div><img src={formik.values.thumbnail}></img></div>
+            <div><img src={formik.values.thumbnail} alt="form"></img></div>
             <div><input className="imginput" type='file' name='thumbnail' onChange={e =>{
                 const fileReader = new FileReader();
                 fileReader.onload = () => {

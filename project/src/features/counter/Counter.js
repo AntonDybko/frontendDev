@@ -12,6 +12,7 @@ import {
 import {useEffect} from 'react';
 import CompGameForm from '../../components/CompGameForm';
 import CompGamesList from '../../components/CompGamesList';
+import CompGameUpdate from '../../components/CompGameUpdate';
 import axios from 'axios'
 
 export function Counter() {
@@ -20,27 +21,27 @@ export function Counter() {
 
   return (
     <Router>
-            <div class='mainrout'>
-                <ul>
-                    <li>
-                        <Link to="/form">Form</Link>
-                    </li>
-                    <li>
-                        <Link to="/list">List</Link>
-                    </li>
-                </ul>
+        <div className='mainrout'>
+            <ul>
+                <li>
+                    <Link to="/form">Form</Link>
+                </li>
+                <li>
+                    <Link to="/list">List</Link>
+                </li>
+            </ul>
 
-                <hr/>
+            <hr/>
 
-                <Routes>
-                    <Route path="/form" element={
-                        <CompGameForm />
-                    }/>
-                    <Route path="/list/*" element={
-                        <CompGamesList />
-                    }/>
-                </Routes>
-            </div>
-        </Router>
+            <Routes>
+                <Route path="/form" element={
+                    <CompGameForm />
+                }/>
+                <Route path="/list/*" element={
+                    <CompGamesList />
+                }/>
+            </Routes>
+        </div>
+    </Router>
   );
 }
