@@ -5,6 +5,8 @@ import {
     asyncUpdateNote
 } from '../../features/counter/gamesSlice';
 import { useLocation } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const validate = (values) => {
     const errors = {};
@@ -30,7 +32,7 @@ const NoteDetails = () => {
     const formik = useFormik({
         initialValues: { data: currnote.data, tresc: currnote.tresc, mark: currnote.mark},
         onSubmit: values => {
-            alert("Note updated");
+            toast.success(`Note with id (${values.id}) updated!`)
             values.data = (new Date()).getTime();
             let newNote = {
                 id: currnote.id,
@@ -71,6 +73,7 @@ const NoteDetails = () => {
                 {formik.errors.mark ? <div>{formik.errors.mark}</div> : null}
 
                 <div><button type="submit">Update</button></div>
+                <ToastContainer />
             </form>
         </div>
     )

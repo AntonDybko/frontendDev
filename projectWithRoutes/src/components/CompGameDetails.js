@@ -12,8 +12,10 @@ import {
 import {
     asyncUpdateGame,
 } from '../features/counter/gamesSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-//console.log("update")
+
 const validate = (values) => {
     const errors = {};
     if(!values.title){
@@ -51,7 +53,6 @@ const validate = (values) => {
     }
     return errors;
 }
-
 const CompGameUpdate = () => {
     const dispatch = useDispatch();
     const location = useLocation()
@@ -74,7 +75,7 @@ const CompGameUpdate = () => {
 
         validate,
         onSubmit: async values => {
-            alert("Game updated");
+            toast.success(`${values.title} updated!`)
             let action = {
                 id: currgame.id,
                 selected_game: {
@@ -158,11 +159,11 @@ const CompGameUpdate = () => {
                       }
                     };
                     fileReader.readAsDataURL(e.target.files[0]);
-                    //formik.setFieldValue('thumbnail', e.target.files[0]);
                 }} onBlur={formik.handleBlur} accept="image/png, image/jpeg, image/jpg"/></div>
                 {formik.errors.thumbnail ? <div>{formik.errors.thumbnail}</div> : null}
                 
-                <div><button type="submit">Update</button></div>
+                <div><button type="submit" >Update</button></div>
+                <ToastContainer />
             </form>
             <h3>Notes</h3>
             <Link to={`/list/${currgame.id}/notes`} state={{ currgame_id: currgame.id }}>View notes</Link>

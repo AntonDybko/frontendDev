@@ -10,6 +10,8 @@ import {
     getGames,
 } from '../../features/counter/gamesSlice';
 import NoteForm from "./NoteForm";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const NoteList = () => {
     const dispatch = useDispatch();
@@ -22,6 +24,7 @@ const NoteList = () => {
 
     const handleDeleteNote = (e) =>{
         const id = e.target.getAttribute("id");
+        toast.error(`Note with id (${id}) deleted!`)
         const newNotes = currnotes.filter(note => note.id !== id);
         dispatch(asyncDeleteNote(currgame.id, id, newNotes))
         console.log(currnotes)
@@ -52,6 +55,7 @@ const NoteList = () => {
                 ))}
             </ul>
             <NoteForm game={currgame}/>
+            <ToastContainer />
         </div>
     )
 }

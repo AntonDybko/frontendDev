@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import {
     asyncAddNote
 } from '../../features/counter/gamesSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const validate = (values) => {
     const errors = {};
@@ -28,7 +30,7 @@ const NoteForm = (props) => {
     const formik = useFormik({
         initialValues: {id: '' , data: '', tresc: '', mark: ''},
         onSubmit: (values, {resetForm}) => {
-            alert("Note added");
+            toast.success(`Note with id (${values.id}) added!`)
             values.id = uuidv4()
             values.data = (new Date()).getTime();
 
@@ -65,6 +67,7 @@ const NoteForm = (props) => {
             <div>
                 <button type='submit'>Submit</button>
             </div>
+            <ToastContainer />
             <hr/>
         </form>
     )

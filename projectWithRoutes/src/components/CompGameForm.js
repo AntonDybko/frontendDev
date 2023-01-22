@@ -4,7 +4,10 @@ import { v4 as uuidv4 } from 'uuid';
 import { useDispatch } from 'react-redux';
 import {
     asyncAddGame
-  } from '../features/counter/gamesSlice';
+} from '../features/counter/gamesSlice';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const validate = (values) => {
     const errors = {};
@@ -52,7 +55,7 @@ const CompGameForm = () => {
         },
         validate,
         onSubmit: (values, {resetForm}) => {
-            alert("Game added");
+            toast.success(`${values.title} added to list of games!`)
             values.id = uuidv4()
             let newgame = {
                 id: values.id,
@@ -140,6 +143,7 @@ const CompGameForm = () => {
                 <button type='submit'>Submit</button>
                 <button type='reset' onClick={formik.handleReset}>Reset</button>
             </div>
+            <ToastContainer />
         </form>
     )
 }

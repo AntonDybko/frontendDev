@@ -10,8 +10,8 @@ import {
     asyncDeleteGame,
   } from '../features/counter/gamesSlice';
 import {  useDispatch, useSelector } from 'react-redux';
-
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
  const CompGamesList = () => {
     const dispatch = useDispatch();
@@ -19,6 +19,7 @@ import {  useDispatch, useSelector } from 'react-redux';
 
     const handleDeleteGame = (event) =>{
         const id = event.target.getAttribute("id")
+        toast.error(`Game with id (${id}) deleted!`)
         dispatch(asyncDeleteGame(id))
     }
     const handleSortByTitle = (e) =>{
@@ -66,6 +67,7 @@ import {  useDispatch, useSelector } from 'react-redux';
                         <div>
                             <button type="button" id={game.id} onClick={handleDeleteGame}>Delete</button>
                         </div>
+                        <ToastContainer />
                         <hr/>
                     </li>
                 ))}
